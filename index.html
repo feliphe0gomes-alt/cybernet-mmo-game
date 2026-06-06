@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberNet MMO - Terminal</title>
+    <title>CyberNet MMO - Terminal Pro</title>
     <style>
         :root {
             --neon-green: #00ff66;
@@ -24,26 +24,29 @@
         .stat span { color: var(--neon-blue); }
 
         /* MAIN LAYOUT */
-        #game-grid { display: grid; grid-template-columns: 300px 1fr 350px; flex-grow: 1; gap: 10px; padding: 10px; height: calc(100vh - 60px); }
+        #game-grid { display: grid; grid-template-columns: 310px 1fr 350px; flex-grow: 1; gap: 10px; padding: 10px; height: calc(100vh - 60px); }
         .panel { background: var(--panel-bg); border: 1px solid #333; border-radius: 5px; display: flex; flex-direction: column; padding: 15px; overflow: hidden; }
-        .panel-title { font-size: 0.9rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; color: #888; text-transform: uppercase; font-weight: bold;}
+        .panel-title { font-size: 0.9rem; margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 5px; color: #888; text-transform: uppercase; font-weight: bold;}
 
         /* NETWORK GRAPH AREA */
-        #network-view { position: relative; background: radial-gradient(circle, #111 0%, #000 100%); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; overflow-y: auto; padding: 40px; flex-grow: 1; }
+        #network-view { position: relative; background: radial-gradient(circle, #111 0%, #000 100%); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px; overflow-y: auto; padding: 30px; flex-grow: 1; }
         .node { width: 120px; height: 120px; border: 2px solid var(--neon-green); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; position: relative; background: rgba(0, 0, 0, 0.8); }
-        .node:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--neon-green); }
+        .node:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--neon-green); }
         .node.active { border-color: var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue); background: rgba(0, 255, 255, 0.1); }
         .node.policia { border-color: var(--neon-red); }
         .node.banco { border-color: var(--neon-gold); }
         .node.player { border-color: var(--neon-purple); box-shadow: 0 0 10px rgba(160, 32, 240, 0.5); }
         .node-label { font-size: 0.7rem; margin-top: 8px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 110px; }
 
-        /* BUTTONS */
+        /* BUTTONS & INPUTS */
         button { background: var(--neon-green); color: #000; border: none; padding: 10px; font-weight: bold; cursor: pointer; margin-bottom: 10px; border-radius: 3px; width: 100%; text-transform: uppercase;}
         button:hover { filter: brightness(1.2); }
-        button:disabled { background: #333; color: #666; cursor: not-allowed; }
+        button:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; box-shadow: none !important; }
         .btn-danger { background: var(--neon-red); color: white; }
         .btn-purple { background: var(--neon-purple); color: white; }
+
+        input[type="text"] { background: #000; color: var(--neon-green); border: 1px solid #333; padding: 8px; width: 100%; font-family: monospace; font-size: 0.8rem; outline: none; border-radius: 3px; }
+        input[type="text"]:focus { border-color: var(--neon-blue); }
 
         /* SCRIPT EDITOR */
         #script-editor { flex-grow: 1; background: #000; color: var(--neon-blue); border: 1px solid #333; padding: 10px; resize: none; font-size: 0.8rem; outline: none; margin-bottom: 10px; }
@@ -57,7 +60,7 @@
         .log-gold { color: var(--neon-gold); }
         .log-purple { color: var(--neon-purple); }
 
-        #loot-box { max-height: 150px; overflow-y: auto; background: #000; padding: 5px; border: 1px solid #222; margin-bottom: 10px; }
+        #loot-box { height: 110px; overflow-y: auto; background: #000; padding: 5px; border: 1px solid #222; margin-bottom: 10px; }
         .loot-item { display: flex; justify-content: space-between; font-size: 0.75rem; padding: 4px; border-bottom: 1px solid #222; align-items: center;}
 
         /* PROGRESS BARS */
@@ -80,15 +83,21 @@
 <div id="game-grid">
     <div class="panel">
         <div class="panel-title">TERMINAL DE COMANDO</div>
-        <button id="btn-scan-main" onclick="actions.scanNetwork()">ESCANEAR REDE</button>
+        <button id="btn-scan-main" onclick="actions.scanNetwork()">ESCANEAR REDE LOCAL</button>
         
-        <div class="panel-title" style="margin-top:15px">DEEP WEB MARKET (ANÔNIMO)</div>
+        <div style="margin-bottom: 15px; border: 1px solid #222; padding: 10px; background: #050505; border-radius: 3px;">
+            <label style="font-size: 0.75rem; color: var(--neon-blue); display: block; margin-bottom: 5px; font-weight: bold;">CONEXÃO DIRETA VIA IP:</label>
+            <input type="text" id="target-ip-input" placeholder="Ex: 192.168.0.1">
+            <button onclick="actions.scanSpecificIP()" style="background: var(--neon-purple); color: white; margin-top: 8px; margin-bottom: 0; padding: 6px; font-size: 0.8rem;">CONECTAR IP</button>
+        </div>
+        
+        <div class="panel-title">DEEP WEB MARKET (ANÔNIMO)</div>
         <div id="loot-box">
             <p style="color:#555; font-size:0.8rem; text-align:center; padding: 10px;">Nenhum dado capturado no inventário.</p>
         </div>
-        <button onclick="actions.sellData()" style="background:var(--neon-gold)">VENDER DADOS CAPTURADOS</button>
+        <button onclick="actions.sellData()" style="background:var(--neon-gold)">VENDER DADOS</button>
 
-        <div class="panel-title" style="margin-top:15px">AUTOMAÇÃO (SCRIPTOR v1)</div>
+        <div class="panel-title" style="margin-top: 10px;">AUTOMAÇÃO (SCRIPTOR v1)</div>
         <textarea id="script-editor" placeholder="// Exemplos:&#10;auto_scan();&#10;hack_nearest();"></textarea>
         <button onclick="scriptEngine.run()" style="background:var(--neon-blue)">EXECUTAR SCRIPT</button>
     </div>
@@ -104,7 +113,7 @@
     <div class="panel">
         <div class="panel-title">INSPEÇÃO DE NÓ SELECIONADO</div>
         <div id="target-ui">
-            <p style="color:#555">Selecione uma sub-rede ou uma assinatura de player ativo no mapa...</p>
+            <p style="color:#555">Selecione uma sub-rede ou digite um IP ativo no scanner para inspecionar...</p>
         </div>
         
         <div class="panel-title" style="margin-top:auto">LOGS DE SISTEMA E ACESSO</div>
@@ -169,6 +178,12 @@
                 document.getElementById('p-cash').innerText = `$${state.player.cash}`;
             }
         }
+        
+        // Correção de Bug: Se o player que tínhamos selecionado deslogar, limpa a seleção para não quebrar a UI
+        if(state.selectedId && !state.selectedId.startsWith('npc_') && !data[state.selectedId]) {
+            state.selectedId = null;
+            log("O host monitorado foi desconectado da rede externa.", "log-red");
+        }
         render();
     });
 
@@ -210,6 +225,49 @@
             });
         },
 
+        scanSpecificIP: function() {
+            if(state.isActionRunning || state.isBeingTraced) return;
+            
+            const ipTarget = document.getElementById('target-ip-input').value.trim();
+            if(!ipTarget) {
+                log("Operação cancelada: Digite um IP válido.", "log-red");
+                return;
+            }
+
+            log(`Forçando handshake TCP síncrono no IP: ${ipTarget}...`, "log-blue");
+
+            this.showProgress(3000, () => {
+                // 1. Procura na lista global de players reais do Firebase
+                let idEncontrado = null;
+                Object.keys(state.onlinePlayers).forEach(id => {
+                    if(state.onlinePlayers[id].ip === ipTarget && id !== myId) {
+                        idEncontrado = id;
+                    }
+                });
+
+                if(idEncontrado) {
+                    state.selectedId = idEncontrado;
+                    log(`Terminal conectado ao host dinâmico [Player Alvo].`, "log-purple");
+                    document.getElementById('target-ip-input').value = '';
+                    render();
+                    return;
+                }
+
+                // 2. Procura nas Redes Locais/NPCs mapeadas
+                const npcEncontrado = state.npcRedes.find(n => n.ip === ipTarget);
+                if(npcEncontrado) {
+                    state.selectedId = npcEncontrado.id;
+                    log(`Terminal conectado ao host estático: ${npcEncontrado.name}`, "log-green");
+                    document.getElementById('target-ip-input').value = '';
+                    render();
+                    return;
+                }
+
+                // 3. Resposta caso não exista
+                log(`Tempo de limite esgotado. Host ${ipTarget} não respondeu aos pacotes PING.`, "log-red");
+            });
+        },
+
         hackNPC: function(id) {
             if(state.isActionRunning || state.isBeingTraced) return;
             const rede = state.npcRedes.find(r => r.id === id);
@@ -233,18 +291,17 @@
             render();
         },
 
-        // NOVA MECÂNICA: FAZ SCAN DE PORTAS NO ALVO PARA EXTRAIR BANCOS DE DADOS
         scanPlayerPorts: function(targetId) {
             if(state.isActionRunning || state.isBeingTraced) return;
             const target = state.onlinePlayers[targetId];
-            if(!target) { log("Alvo offline.", "log-red"); return; }
+            if(!target) { log("Alvo desconectado.", "log-red"); return; }
 
-            log(`Efetuando varredura de portas TCP/UDP em ${target.ip}...`, 'log-purple');
+            log(`Efetuando varredura de portas abertas em ${target.ip}...`, 'log-purple');
             
             this.showProgress(5000, () => {
-                const extensions = ['_user_db.sql', '_creds.json', '_ledger.dat'];
+                const extensions = ['_user_db.sql', '_creds.json', '_ledger.dat', '_dump.tar.gz'];
                 const dataType = extensions[Math.floor(Math.random() * extensions.length)];
-                const dataName = target.id + dataType;
+                const dataName = "target_" + Math.floor(Math.random() * 900 + 100) + dataType;
                 const valorEstimado = Math.floor(Math.random() * 400) + 250;
 
                 state.capturedData.push({
@@ -253,12 +310,11 @@
                     val: valorEstimado
                 });
 
-                log(`Sucesso! Pacotes corrompidos interceptados de ${target.ip}. Salvo no inventário.`, 'log-green');
+                log(`Sucesso! Banco de dados de ${target.ip} interceptado com sucesso.`, 'log-green');
                 render();
             });
         },
 
-        // MECÂNICA ROUBAR TUDO (SINCRO FIREBASE CORRIGIDA)
         startPlayerTrace: function(targetId) {
             if(state.isActionRunning || state.isBeingTraced) return;
             const target = state.onlinePlayers[targetId];
@@ -277,9 +333,9 @@
                         db.ref('players/' + targetId).update({ cash: 0 });
                         playerRef.update({ cash: state.player.cash });
                         
-                        log(`RUMBLE! Você esvaziou a carteira de ${currentTarget.ip}, total: $${roubo}!`, 'log-green');
+                        log(`Sucesso! Você quebrou a criptografia e drenou $${roubo} de ${currentTarget.ip}!`, 'log-green');
                     } else {
-                        log("Alvo desconectou do terminal a tempo.", "log-red");
+                        log("Alvo perdeu a conexão ou fechou o terminal durante o ataque.", "log-red");
                     }
                     db.ref('traces/' + targetId).remove();
                 });
@@ -300,6 +356,7 @@
                 p += 1;
                 bar.style.width = p + "%";
                 
+                // Se o player for limpo ou mudar de rede cortando o rastro
                 if(!state.isBeingTraced || state.player.cash === 0) {
                     clearInterval(interval);
                     container.style.display = 'none';
@@ -332,13 +389,17 @@
             state.player.cash += totalGain;
             playerRef.update({ cash: state.player.cash });
             
-            log(`Deep Web liquidadora: Foram vendidos ${state.capturedData.length} arquivos. Lucro: +$${totalGain}`, 'log-gold');
+            log(`Deep Web: Foram liquidados ${state.capturedData.length} arquivos anonimamente. Lucro: +$${totalGain}`, 'log-gold');
             state.capturedData = [];
             render();
         },
 
         showProgress: function(ms, callback, mode = 'normal') {
             state.isActionRunning = true;
+            
+            // Travar visualmente botões críticos durante execução
+            document.getElementById('btn-scan-main').disabled = true;
+            
             const container = document.getElementById('prog-container');
             const bar = document.getElementById('prog-bar');
             container.style.display = 'block';
@@ -356,6 +417,7 @@
                 } else {
                     container.style.display = 'none';
                     state.isActionRunning = false;
+                    document.getElementById('btn-scan-main').disabled = false;
                     callback();
                 }
             }
@@ -428,7 +490,7 @@
             view.appendChild(node);
         });
 
-        // Interface do Alvo Selecionado
+        // Interface do Alvo Selecionado (Painel Direita)
         const targetUI = document.getElementById('target-ui');
         if(state.selectedId !== null) {
             if(state.selectedId.startsWith('npc_')) {
@@ -436,12 +498,12 @@
                 if(!net) return;
                 targetUI.innerHTML = `
                     <h3>${net.name}</h3>
-                    <p>IP: ${net.ip}</p>
-                    <p>SEGMENTO: <span style="color:var(--neon-${CONFIG.types[net.type].color})">${net.type}</span></p>
-                    <p>DISPOSITIVOS: ${net.devices}</p>
+                    <p style="margin: 4px 0;">IP: ${net.ip}</p>
+                    <p style="margin: 4px 0;">SEGMENTO: <span style="color:var(--neon-${CONFIG.types[net.type].color})">${net.type}</span></p>
+                    <p style="margin: 4px 0;">DISPOSITIVOS: ${net.devices}</p>
                     <hr style="margin:10px 0; border:0; border-top:1px solid #333">
-                    <button onclick="actions.mover('${net.name}')">DEFINIR PROXY NESTE NÓ</button>
-                    <button class="btn-danger" onclick="actions.hackNPC('${net.id}')">INJETAR EXPLOIT BANCÁRIO</button>
+                    <button onclick="actions.mover('${net.name}')" ${state.isActionRunning ? 'disabled' : ''}>DEFINIR PROXY NESTE NÓ</button>
+                    <button class="btn-danger" onclick="actions.hackNPC('${net.id}')" ${state.isActionRunning ? 'disabled' : ''}>INJETAR EXPLOIT BANCÁRIO</button>
                 `;
             } else {
                 const p = state.onlinePlayers[state.selectedId];
@@ -451,18 +513,20 @@
                 
                 targetUI.innerHTML = `
                     <h3 style="color:var(--neon-purple)">PLAYER IDENTIFICADO</h3>
-                    <p>IP ADQUIRIDO: ${p.ip}</p>
-                    <p>SUB-REDE ATUAL: <span style="color:var(--neon-blue)">${p.currentNet}</span></p>
+                    <p style="margin: 4px 0;">IP ADQUIRIDO: ${p.ip}</p>
+                    <p style="margin: 4px 0;">SUB-REDE ATUAL: <span style="color:var(--neon-blue)">${p.currentNet}</span></p>
                     <hr style="margin:10px 0; border:0; border-top:1px solid #333">
                     
-                    <button class="btn-purple" onclick="actions.scanPlayerPorts('${p.id}')">ESCANEAR PORTAS & ROUBAR DADOS</button>
+                    <button class="btn-purple" onclick="actions.scanPlayerPorts('${p.id}')" ${state.isActionRunning ? 'disabled' : ''}>ESCANEAR PORTAS & ROUBAR DADOS</button>
                     
                     ${mesmaRede 
-                        ? `<button class="btn-danger" onclick="actions.startPlayerTrace('${p.id}')">RASTREAR & LIMPAR SALDO</button>`
-                        : `<p style="color:var(--neon-red); font-size:0.75rem; text-align:center; margin-top:5px;">Para sugar a conta bancária do player, mude seu proxy para a mesma rede dele (${p.currentNet}).</p>`
+                        ? `<button class="btn-danger" onclick="actions.startPlayerTrace('${p.id}')" ${state.isActionRunning ? 'disabled' : ''}>RASTREAR & LIMPAR SALDO</button>`
+                        : `<p style="color:var(--neon-red); font-size:0.75rem; text-align:center; margin-top:5px; border: 1px dashed #333; padding: 6px;">Para forçar o roubo de fundos bancários, mude seu proxy para a sub-rede ativa da vítima (${p.currentNet}).</p>`
                     }
                 `;
             }
+        } else {
+            targetUI.innerHTML = `<p style="color:#555">Selecione uma sub-rede ou digite um IP ativo no scanner para inspecionar...</p>`;
         }
     }
 
@@ -482,7 +546,7 @@
     }
 
     render();
-    log("Interface CyberNet Core v2.0 carregada. Protocolos Deep Web: Operacionais.", "log-green");
+    log("Interface CyberNet Core v2.2 carregada. Proteções de Runtime injetadas.", "log-green");
 </script>
 
 </body>
