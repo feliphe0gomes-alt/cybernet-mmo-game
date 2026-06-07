@@ -3,70 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberNet MMO - Terminal Pro</title>
+    <title>CyberNet MMO - Hacker Wars Edition</title>
     <style>
         :root {
-            --neon-green: #00ff66;
-            --neon-blue: #00ffff;
-            --neon-red: #ff003c;
-            --neon-gold: #ffcc00;
-            --neon-purple: #a020f0;
-            --bg-dark: #050505;
-            --panel-bg: #111;
+            --bg-main: #f4f4f4;
+            --bg-dark-panel: #222222;
+            --bg-sidebar: #333333;
+            --text-dark: #333333;
+            --accent-green: #00ff66;
+            --accent-blue: #0099ff;
+            --accent-red: #cc0033;
+            --border-gray: #dddddd;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
-        body { background-color: var(--bg-dark); color: var(--neon-green); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-dark); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* HUD */
-        #hud { display: flex; justify-content: space-around; background: #000; padding: 15px; border-bottom: 2px solid var(--neon-green); box-shadow: 0 0 15px rgba(0, 255, 102, 0.3); z-index: 10; }
-        .stat { font-size: 1.1rem; text-transform: uppercase; font-weight: bold; }
-        .stat span { color: var(--neon-blue); }
+        /* HEADER */
+        #top-header { background: var(--bg-dark-panel); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #111; font-size: 0.9rem; }
+        .logo-area { font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .stats-top { display: flex; gap: 20px; align-items: center; }
+        .stats-top span { color: #aaa; }
+        .stats-top strong { color: var(--accent-green); }
 
-        /* MAIN LAYOUT */
-        #game-grid { display: grid; grid-template-columns: 310px 1fr 350px; flex-grow: 1; gap: 10px; padding: 10px; height: calc(100vh - 60px); }
-        .panel { background: var(--panel-bg); border: 1px solid #333; border-radius: 5px; display: flex; flex-direction: column; padding: 15px; overflow: hidden; }
-        .panel-title { font-size: 0.9rem; margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 5px; color: #888; text-transform: uppercase; font-weight: bold;}
+        /* MAIN CONTAINER */
+        #main-container { display: flex; flex-grow: 1; height: calc(100vh - 45px); }
 
-        /* NETWORK GRAPH AREA */
-        #network-view { position: relative; background: radial-gradient(circle, #111 0%, #000 100%); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px; overflow-y: auto; padding: 30px; flex-grow: 1; }
-        .node { width: 120px; height: 120px; border: 2px solid var(--neon-green); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; position: relative; background: rgba(0, 0, 0, 0.8); }
-        .node:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--neon-green); }
-        .node.active { border-color: var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue); background: rgba(0, 255, 255, 0.1); }
-        .node.policia { border-color: var(--neon-red); }
-        .node.banco { border-color: var(--neon-gold); }
-        .node.player { border-color: var(--neon-purple); box-shadow: 0 0 10px rgba(160, 32, 240, 0.5); }
-        .node-label { font-size: 0.7rem; margin-top: 8px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 110px; }
+        /* SIDEBAR NAVIGATION */
+        #sidebar { width: 240px; background: var(--bg-sidebar); display: flex; flex-direction: column; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        .nav-item { padding: 14px 20px; color: #ccc; text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid #444; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .nav-item:hover { background: #444; color: #fff; }
+        .nav-item.active { background: #111; color: var(--accent-blue); border-left: 4px solid var(--accent-blue); }
 
-        /* BUTTONS & INPUTS */
-        button { background: var(--neon-green); color: #000; border: none; padding: 10px; font-weight: bold; cursor: pointer; margin-bottom: 10px; border-radius: 3px; width: 100%; text-transform: uppercase;}
-        button:hover { filter: brightness(1.2); }
-        button:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; box-shadow: none !important; }
-        .btn-danger { background: var(--neon-red); color: white; }
-        .btn-purple { background: var(--neon-purple); color: white; }
+        /* CONTENT WORKSPACE */
+        #workspace { flex-grow: 1; padding: 20px; overflow-y: auto; background: #eaedf1; }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
 
-        input[type="text"] { background: #000; color: var(--neon-green); border: 1px solid #333; padding: 8px; width: 100%; font-family: monospace; font-size: 0.8rem; outline: none; border-radius: 3px; }
-        input[type="text"]:focus { border-color: var(--neon-blue); }
+        /* PANELS & TABLES style HackerWars */
+        .hw-panel { background: #fff; border: 1px solid var(--border-gray); border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .hw-panel-header { background: #fafafa; border-bottom: 1px solid var(--border-gray); padding: 12px 18px; font-size: 0.95rem; font-weight: bold; color: #555; }
+        .hw-panel-body { padding: 18px; }
 
-        /* SCRIPT EDITOR */
-        #script-editor { flex-grow: 1; background: #000; color: var(--neon-blue); border: 1px solid #333; padding: 10px; resize: none; font-size: 0.8rem; outline: none; margin-bottom: 10px; }
+        /* TABLES */
+        .hw-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        .hw-table th { background: #f1f1f1; text-align: left; padding: 10px; border-bottom: 2px solid var(--border-gray); color: #666; }
+        .hw-table td { padding: 10px; border-bottom: 1px solid var(--border-gray); }
+        .hw-table tr:hover { background: #f9f9f9; }
 
-        /* LOGS & INVENTORY */
-        #logs { height: 180px; background: #000; border: 1px solid #222; padding: 10px; overflow-y: auto; font-size: 0.8rem; margin-top: 10px; }
-        .log-entry { margin-bottom: 4px; border-left: 2px solid #333; padding-left: 5px; }
-        .log-green { color: var(--neon-green); }
-        .log-blue { color: var(--neon-blue); }
-        .log-red { color: var(--neon-red); }
-        .log-gold { color: var(--neon-gold); }
-        .log-purple { color: var(--neon-purple); }
+        /* BUTTONS AND INPUTS */
+        .btn { background: #007bff; color: white; border: none; padding: 8px 14px; font-size: 0.8rem; font-weight: bold; border-radius: 3px; cursor: pointer; text-transform: uppercase; }
+        .btn:hover { opacity: 0.9; }
+        .btn-success { background: var(--accent-green); color: #000; }
+        .btn-danger { background: var(--accent-red); color: white; }
+        .btn-disabled { background: #ccc !important; color: #666 !important; cursor: not-allowed; }
+        
+        input[type="text"] { padding: 8px; border: 1px solid var(--border-gray); border-radius: 3px; width: 100%; font-size: 0.85rem; margin-bottom: 10px; }
 
-        #loot-box { height: 110px; overflow-y: auto; background: #000; padding: 5px; border: 1px solid #222; margin-bottom: 10px; }
-        .loot-item { display: flex; justify-content: space-between; font-size: 0.75rem; padding: 4px; border-bottom: 1px solid #222; align-items: center;}
+        /* LISTA DE TAREFAS / PROCESSOS */
+        .task-row { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--border-gray); padding: 15px; margin-bottom: 10px; border-radius: 4px; font-size: 0.85rem; }
+        .progress-container { background: #e0e0e0; width: 200px; height: 10px; border-radius: 5px; overflow: hidden; margin-left: 10px; }
+        .progress-bar { background: var(--accent-blue); height: 100%; width: 0%; transition: width 0.2s linear; }
 
-        /* PROGRESS BARS */
-        .progress-container { width: 100%; background: #222; height: 12px; margin: 10px 0; border-radius: 10px; overflow: hidden; display: none; }
-        .progress-bar { height: 100%; width: 0%; background: var(--neon-green); transition: width 0.1s linear; }
-        .trace-bar { background: var(--neon-red); box-shadow: 0 0 10px var(--neon-red); }
+        /* DEEP WEB MARKET */
+        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .market-card { background: #fff; border: 1px solid var(--border-gray); padding: 15px; border-radius: 4px; text-align: center; }
+
+        /* TERMINAL LOGS INTERNOS */
+        #sys-logs { background: #000; color: #00ff66; font-family: monospace; padding: 12px; font-size: 0.8rem; height: 120px; overflow-y: auto; border-radius: 4px; margin-top: 15px; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -74,55 +78,125 @@
 </head>
 <body>
 
-<div id="hud">
-    <div class="stat">USER_IP: <span id="p-ip">...</span></div>
-    <div class="stat">NET: <span id="p-net">Localhost</span></div>
-    <div class="stat">BALANCE: <span id="p-cash" style="color:var(--neon-gold)">$0</span></div>
+<div id="top-header">
+    <div class="logo-area">💻 CyberNet MMO <span style="font-size: 0.75rem; color:#888;">v3.0 - HW Engine</span></div>
+    <div class="stats-top">
+        <div>IP ATUAL: <strong id="hud-ip">0.0.0.0</strong></div>
+        <div>SALDO: <strong id="hud-cash" style="color:var(--accent-green)">$0</strong></div>
+        <div>CONEXÕES ONLINE: <span id="hud-online-count" style="color:#fff; font-weight:bold;">1</span></div>
+    </div>
 </div>
 
-<div id="game-grid">
-    <div class="panel">
-        <div class="panel-title">TERMINAL DE COMANDO</div>
-        <button id="btn-scan-main" onclick="actions.scanNetwork()">ESCANEAR REDE LOCAL</button>
-        
-        <div style="margin-bottom: 15px; border: 1px solid #222; padding: 10px; background: #050505; border-radius: 3px;">
-            <label style="font-size: 0.75rem; color: var(--neon-blue); display: block; margin-bottom: 5px; font-weight: bold;">CONEXÃO DIRETA VIA IP:</label>
-            <input type="text" id="target-ip-input" placeholder="Ex: 192.168.0.1">
-            <button onclick="actions.scanSpecificIP()" style="background: var(--neon-purple); color: white; margin-top: 8px; margin-bottom: 0; padding: 6px; font-size: 0.8rem;">CONECTAR IP</button>
-        </div>
-        
-        <div class="panel-title">DEEP WEB MARKET (ANÔNIMO)</div>
-        <div id="loot-box">
-            <p style="color:#555; font-size:0.8rem; text-align:center; padding: 10px;">Nenhum dado capturado no inventário.</p>
-        </div>
-        <button onclick="actions.sellData()" style="background:var(--neon-gold)">VENDER DADOS</button>
-
-        <div class="panel-title" style="margin-top: 10px;">AUTOMAÇÃO (SCRIPTOR v1)</div>
-        <textarea id="script-editor" placeholder="// Exemplos:&#10;auto_scan();&#10;hack_nearest();"></textarea>
-        <button onclick="scriptEngine.run()" style="background:var(--neon-blue)">EXECUTAR SCRIPT</button>
+<div id="main-container">
+    
+    <div id="sidebar">
+        <div class="nav-item active" onclick="ui.switchTab('sec-inicio', this)">🏠 Início</div>
+        <div class="nav-item" onclick="ui.switchTab('sec-tarefas', this)">⚙️ Gerenciador de Tarefas</div>
+        <div class="nav-item" onclick="ui.switchTab('sec-software', this)">💾 Central de Softwares</div>
+        <div class="nav-item" onclick="ui.switchTab('sec-internet', this)">🌐 Redes Externas (Internet)</div>
+        <div class="nav-item" onclick="ui.switchTab('sec-deepweb', this)">🕶️ Mercado Deep Web</div>
     </div>
 
-    <div class="panel">
-        <div class="panel-title">VISUALIZAÇÃO DE TOPOLOGIA DA REDE MUNDIAL</div>
-        <div id="network-view"></div>
-        <div class="progress-container" id="prog-container">
-            <div id="prog-bar" class="progress-bar"></div>
-        </div>
-    </div>
+    <div id="workspace">
 
-    <div class="panel">
-        <div class="panel-title">INSPEÇÃO DE NÓ SELECIONADO</div>
-        <div id="target-ui">
-            <p style="color:#555">Selecione uma sub-rede ou digite um IP ativo no scanner para inspecionar...</p>
+        <div id="sec-inicio" class="view-section active">
+            <div class="hw-panel">
+                <div class="hw-panel-header">Status Geral do Servidor Local</div>
+                <div class="hw-panel-body">
+                    <p style="margin-bottom: 10px;">Bem-vindo de volta ao terminal operacional do CyberNet, <strong>Felipe</strong>.</p>
+                    <p>Sub-rede atual de gateway associada: <span id="local-gateway" style="color:var(--accent-blue); font-weight:bold;">Minha Rede</span></p>
+                    <div id="sys-logs"></div>
+                </div>
+            </div>
         </div>
-        
-        <div class="panel-title" style="margin-top:auto">LOGS DE SISTEMA E ACESSO</div>
-        <div id="logs"></div>
+
+        <div id="sec-tarefas" class="view-section">
+            <div class="hw-panel">
+                <div class="hw-panel-header">Processos Ativos da CPU (100% Capacidade)</div>
+                <div class="hw-panel-body" id="tasks-list">
+                    <p style="color:#777; font-size:0.85rem;">Nenhuma tarefa pendente ou compilação em andamento.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="sec-software" class="view-section">
+            <div class="hw-panel">
+                <div class="hw-panel-header">Pesquisar e Compilar Softwares Operacionais</div>
+                <div class="hw-panel-body">
+                    <table class="hw-table">
+                        <thead>
+                            <tr>
+                                <th>Nome do Executável</th>
+                                <th>Tipo</th>
+                                <th>Tempo de Compilação</th>
+                                <th>Custo</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Basic_Cracker.crc</strong> (v1.0)</td>
+                                <td>Bruteforce / Quebra de Saldo</td>
+                                <td>15 segundos</td>
+                                <td>$50</td>
+                                <td><button class="btn" onclick="actions.createSoftware('Basic_Cracker.crc', 15, 50)">Compilar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Port_Scanner.exe</strong> (v1.2)</td>
+                                <td>Extração de Dados/Arquivos</td>
+                                <td>8 segundos</td>
+                                <td>$30</td>
+                                <td><button class="btn" onclick="actions.createSoftware('Port_Scanner.exe', 8, 30)">Compilar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="sec-internet" class="view-section">
+            <div class="hw-panel">
+                <div class="hw-panel-header">Buscar Alvos na Rede Mundial ou Conectar via IP Direct</div>
+                <div class="hw-panel-body">
+                    <div style="display:flex; gap:10px; margin-bottom: 20px;">
+                        <input type="text" id="target-ip-search" placeholder="Digite o endereço IP do alvo (Ex: 192.168.2.45)" style="margin-bottom:0;">
+                        <button class="btn btn-success" onclick="actions.connectViaIP()">Conectar IP</button>
+                    </div>
+                    <button class="btn" style="margin-bottom: 15px;" onclick="actions.discoverNodes()">Mapear Nós Adjacentes</button>
+
+                    <h4 style="font-size: 0.9rem; margin-top: 10px; color:#555;">Terminais e Servidores Visíveis:</h4>
+                    <table class="hw-table" id="internet-table">
+                        <thead>
+                            <tr>
+                                <th>Assinatura / Host</th>
+                                <th>Endereço IP</th>
+                                <th>Rede Mapeada</th>
+                                <th>Operações Críticas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="network-list-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="sec-deepweb" class="view-section">
+            <div class="hw-panel">
+                <div class="hw-panel-header">Servidor Proxy Criptografado - Mercado Negro de Dados</div>
+                <div class="hw-panel-body">
+                    <div class="market-grid" id="market-container">
+                        </div>
+                    <button class="btn btn-success" style="margin-top:20px; width:100%;" onclick="actions.sellAllCollectedData()">Liquidar Todos os Arquivos Anonimamente</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script>
-    // --- CONFIGURAÇÃO DO FIREBASE ---
+    // --- CONFIGURAÇÃO DA API DO FIREBASE ---
     const firebaseConfig = {
         apiKey: "AIzaSyD8RPa3uKbo3xPstwG7ymxIAjUHrkvDdwk",
         authDomain: "cybernet-9ac4b.firebaseapp.com",
@@ -136,16 +210,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const CONFIG = {
-        types: {
-            RESIDENCIAL: { color: 'green', multiplier: 50, time: 3 },
-            EMPRESARIAL: { color: 'blue', multiplier: 200, time: 8 },
-            BANCO: { color: 'gold', multiplier: 1000, time: 15 },
-            POLICIA: { color: 'red', multiplier: 0, time: 20 },
-            PLAYER: { color: 'purple', multiplier: 0, time: 10 }
-        }
-    };
-
     function generateIP() {
         return `${Math.floor(Math.random()*220)+10}.${Math.floor(Math.random()*254)}.${Math.floor(Math.random()*254)}.${Math.floor(Math.random()*254)}`;
     }
@@ -154,16 +218,14 @@
     let myIp = generateIP();
 
     let state = {
-        player: { id: myId, ip: myIp, cash: 200, currentNet: 'Minha Rede', isOnline: true },
-        npcRedes: [{ id: 'npc_0', name: 'Minha Rede', ip: '192.168.0.1', type: 'RESIDENCIAL', devices: 2 }],
+        player: { id: myId, ip: myIp, cash: 500, currentNet: 'Minha Rede', isOnline: true },
         onlinePlayers: {},
-        capturedData: [], 
-        selectedId: null,
-        isActionRunning: false,
-        isBeingTraced: false
+        npcNodes: [{ id: 'npc_0', name: 'Servidor_Residencial', ip: '192.168.0.1', type: 'RESIDENCIAL' }],
+        activeTasks: [],
+        lootFiles: []
     };
 
-    // --- CONEXÃO REALTIME COM FIREBASE ---
+    // --- CONEXÃO FIREBASE REALTIME ---
     const playerRef = db.ref('players/' + myId);
     playerRef.set(state.player);
     playerRef.onDisconnect().remove();
@@ -172,381 +234,242 @@
         const data = snapshot.val() || {};
         state.onlinePlayers = data;
         
-        if (data[myId]) {
-            if (data[myId].cash !== state.player.cash) {
-                state.player.cash = data[myId].cash;
-                document.getElementById('p-cash').innerText = `$${state.player.cash}`;
-            }
+        if (data[myId] && data[myId].cash !== state.player.cash) {
+            state.player.cash = data[myId].cash;
         }
         
-        // Correção de Bug: Se o player que tínhamos selecionado deslogar, limpa a seleção para não quebrar a UI
-        if(state.selectedId && !state.selectedId.startsWith('npc_') && !data[state.selectedId]) {
-            state.selectedId = null;
-            log("O host monitorado foi desconectado da rede externa.", "log-red");
-        }
-        render();
+        document.getElementById('hud-online-count').innerText = Object.keys(data).length;
+        ui.renderAll();
     });
 
+    // Ouvinte para ataques direcionados
     db.ref('traces/' + myId).on('value', (snapshot) => {
-        const traceData = snapshot.val();
-        if(traceData && traceData.status === 'active' && !state.isBeingTraced) {
-            actions.undergoTrace(traceData.attackerId);
+        const trace = snapshot.val();
+        if(trace && trace.status === 'active') {
+            logSystem("ALERTA DE SEGURANÇA: Seu Firewall local está sob ataque bruteforce!", "log-red");
         }
     });
 
-    function log(msg, type = '') {
+    function logSystem(msg, type = '') {
         const div = document.createElement('div');
         div.className = `log-entry ${type}`;
         div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
-        const container = document.getElementById('logs');
+        const container = document.getElementById('sys-logs');
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
     }
 
-    // --- AÇÕES DO GAMEPLAY ---
+    // --- ENGINES DO GAMEPLAY ---
     const actions = {
-        scanNetwork: function() {
-            if(state.isActionRunning || state.isBeingTraced) return;
-            log("Varrendo topologias externas e gateways remotos...", "log-blue");
-            
-            this.showProgress(2000, () => {
-                const types = ['RESIDENCIAL', 'EMPRESARIAL', 'BANCO', 'POLICIA'];
-                const type = types[Math.floor(Math.random() * types.length)];
-                const newNet = {
-                    id: 'npc_' + Date.now(),
-                    name: `Net_${type}_${Math.floor(Math.random()*899)+100}`,
-                    ip: generateIP(),
-                    type: type,
-                    devices: Math.floor(Math.random()*8) + 2
-                };
-                state.npcRedes.push(newNet);
-                log(`Novo nó de rede mapeado: ${newNet.ip} (${type})`, 'log-gold');
-                render();
-            });
+        discoverNodes: function() {
+            logSystem("Mapeando servidores externos via pinging de pacotes...", "log-blue");
+            const types = ['EMPRESARIAL', 'BANCO', 'POLICIA'];
+            const chosen = types[Math.floor(Math.random() * types.length)];
+            const newNode = {
+                id: 'npc_' + Date.now(),
+                name: `Servidor_${chosen}_${Math.floor(Math.random()*89+10)}`,
+                ip: generateIP(),
+                type: chosen
+            };
+            state.npcNodes.push(newNode);
+            ui.renderAll();
         },
 
-        scanSpecificIP: function() {
-            if(state.isActionRunning || state.isBeingTraced) return;
+        connectViaIP: function() {
+            const ipInput = document.getElementById('target-ip-search').value.trim();
+            if(!ipInput) return;
+
+            logSystem(`Tentando conexão TCP via IP Direct para: ${ipInput}...`, "log-blue");
             
-            const ipTarget = document.getElementById('target-ip-input').value.trim();
-            if(!ipTarget) {
-                log("Operação cancelada: Digite um IP válido.", "log-red");
+            this.triggerTask(`Handshake TCP com ${ipInput}`, 4, () => {
+                let targetFound = null;
+                Object.keys(state.onlinePlayers).forEach(id => {
+                    if(state.onlinePlayers[id].ip === ipInput && id !== myId) targetFound = state.onlinePlayers[id];
+                });
+
+                const npcFound = state.npcNodes.find(n => n.ip === ipInput);
+
+                if(targetFound || npcFound) {
+                    logSystem(`Conexão estabelecida com sucesso com o Host Remoto (${ipInput}).`, "log-green");
+                    ui.switchTab('sec-internet', document.querySelectorAll('.nav-item')[3]);
+                } else {
+                    logSystem(`Host ${ipInput} inacessível ou offline.`, "log-red");
+                }
+            });
+            document.getElementById('target-ip-search').value = '';
+        },
+
+        createSoftware: function(name, duration, cost) {
+            if(state.player.cash < cost) {
+                logSystem("Fundos insuficientes para compilar este software.", "log-red");
                 return;
             }
+            state.player.cash -= cost;
+            playerRef.update({ cash: state.player.cash });
 
-            log(`Forçando handshake TCP síncrono no IP: ${ipTarget}...`, "log-blue");
-
-            this.showProgress(3000, () => {
-                // 1. Procura na lista global de players reais do Firebase
-                let idEncontrado = null;
-                Object.keys(state.onlinePlayers).forEach(id => {
-                    if(state.onlinePlayers[id].ip === ipTarget && id !== myId) {
-                        idEncontrado = id;
-                    }
-                });
-
-                if(idEncontrado) {
-                    state.selectedId = idEncontrado;
-                    log(`Terminal conectado ao host dinâmico [Player Alvo].`, "log-purple");
-                    document.getElementById('target-ip-input').value = '';
-                    render();
-                    return;
-                }
-
-                // 2. Procura nas Redes Locais/NPCs mapeadas
-                const npcEncontrado = state.npcRedes.find(n => n.ip === ipTarget);
-                if(npcEncontrado) {
-                    state.selectedId = npcEncontrado.id;
-                    log(`Terminal conectado ao host estático: ${npcEncontrado.name}`, "log-green");
-                    document.getElementById('target-ip-input').value = '';
-                    render();
-                    return;
-                }
-
-                // 3. Resposta caso não exista
-                log(`Tempo de limite esgotado. Host ${ipTarget} não respondeu aos pacotes PING.`, "log-red");
+            logSystem(`Compilando executável ${name} em localhost...`, "log-blue");
+            this.triggerTask(`Desenvolver ${name}`, duration, () => {
+                logSystem(`Compilação concluída: ${name} (v1.0) pronto para deploy.`, "log-green");
             });
         },
 
-        hackNPC: function(id) {
-            if(state.isActionRunning || state.isBeingTraced) return;
-            const rede = state.npcRedes.find(r => r.id === id);
-            if(!rede) return;
-            const time = CONFIG.types[rede.type].time * 1000;
-
-            log(`Comprometendo roteador de ${rede.name}...`, 'log-red');
-            this.showProgress(time, () => {
-                const payout = rede.devices * CONFIG.types[rede.type].multiplier;
-                state.player.cash += payout;
-                playerRef.update({ cash: state.player.cash });
-                log(`Exploit executado com sucesso! Limpando fundos: +$${payout}`, 'log-green');
-                render();
+        executePortScan: function(targetId, targetIp) {
+            logSystem(`Iniciando Port Scan sequencial no endereço ${targetIp}...`, "log-blue");
+            this.triggerTask(`Port Scan em ${targetIp}`, 6, () => {
+                const formats = ['_db_dump.sql', '_shadow_creds.json', '_ledger.dat'];
+                const harvested = {
+                    filename: `host_${Math.floor(Math.random()*899+100)}${formats[Math.floor(Math.random()*formats.length)]}`,
+                    origin: targetIp,
+                    estimatedValue: Math.floor(Math.random() * 500) + 200
+                };
+                state.lootFiles.push(harvested);
+                logSystem(`Varredura completa! Arquivo extraído com sucesso: ${harvested.filename}`, "log-green");
+                ui.renderAll();
             });
         },
 
-        mover: function(name) {
-            state.player.currentNet = name;
-            playerRef.update({ currentNet: name });
-            log(`Proxy redirecionado. Seu tráfego agora passa por: ${name}`, 'log-blue');
-            render();
-        },
-
-        scanPlayerPorts: function(targetId) {
-            if(state.isActionRunning || state.isBeingTraced) return;
-            const target = state.onlinePlayers[targetId];
-            if(!target) { log("Alvo desconectado.", "log-red"); return; }
-
-            log(`Efetuando varredura de portas abertas em ${target.ip}...`, 'log-purple');
-            
-            this.showProgress(5000, () => {
-                const extensions = ['_user_db.sql', '_creds.json', '_ledger.dat', '_dump.tar.gz'];
-                const dataType = extensions[Math.floor(Math.random() * extensions.length)];
-                const dataName = "target_" + Math.floor(Math.random() * 900 + 100) + dataType;
-                const valorEstimado = Math.floor(Math.random() * 400) + 250;
-
-                state.capturedData.push({
-                    name: dataName,
-                    origin: target.ip,
-                    val: valorEstimado
-                });
-
-                log(`Sucesso! Banco de dados de ${target.ip} interceptado com sucesso.`, 'log-green');
-                render();
-            });
-        },
-
-        startPlayerTrace: function(targetId) {
-            if(state.isActionRunning || state.isBeingTraced) return;
-            const target = state.onlinePlayers[targetId];
-            if(!target) return;
-
-            log(`Iniciando Bruteforce de Bypass na sub-rede de ${target.ip}...`, 'log-red');
+        executeBruteforce: function(targetId, targetIp) {
+            logSystem(`Injetando exploit Bruteforce em ${targetIp}. Quebrando chaves de criptografia...`, "log-red");
             db.ref('traces/' + targetId).set({ attackerId: myId, status: 'active' });
 
-            this.showProgress(10000, () => {
+            this.triggerTask(`Bruteforce em ${targetIp}`, 12, () => {
                 db.ref('players/' + targetId).once('value', (snap) => {
-                    const currentTarget = snap.val();
-                    if(currentTarget) {
-                        const roubo = currentTarget.cash;
-                        state.player.cash += roubo;
-                        
+                    const data = snap.val();
+                    if(data) {
+                        const stolenCash = data.cash;
+                        state.player.cash += stolenCash;
                         db.ref('players/' + targetId).update({ cash: 0 });
                         playerRef.update({ cash: state.player.cash });
-                        
-                        log(`Sucesso! Você quebrou a criptografia e drenou $${roubo} de ${currentTarget.ip}!`, 'log-green');
-                    } else {
-                        log("Alvo perdeu a conexão ou fechou o terminal durante o ataque.", "log-red");
+                        logSystem(`Ataque bem sucedido! Você limpou a conta de ${targetIp}, coletando $${stolenCash}.`, "log-green");
                     }
                     db.ref('traces/' + targetId).remove();
                 });
-            }, 'trace');
+            });
         },
 
-        undergoTrace: function(attackerId) {
-            state.isBeingTraced = true;
-            log("ALERTA: INTRUSÃO DETECTADA! RASTREIO ATIVO NO SEU IP CONFIGURADO!", "log-red");
-            
-            const container = document.getElementById('prog-container');
-            const bar = document.getElementById('prog-bar');
-            container.style.display = 'block';
-            bar.className = "progress-bar trace-bar";
-            
-            let p = 0;
-            const interval = setInterval(() => {
-                p += 1;
-                bar.style.width = p + "%";
-                
-                // Se o player for limpo ou mudar de rede cortando o rastro
-                if(!state.isBeingTraced || state.player.cash === 0) {
-                    clearInterval(interval);
-                    container.style.display = 'none';
-                    bar.className = "progress-bar";
-                    state.isBeingTraced = false;
-                    render();
-                }
-
-                if(p >= 100) {
-                    clearInterval(interval);
-                    container.style.display = 'none';
-                    bar.className = "progress-bar";
-                    state.isBeingTraced = false;
-                    state.player.cash = 0;
-                    playerRef.update({ cash: 0 });
-                    log("OVERRIDE: Suas defesas falharam. Seu saldo foi drenado.", "log-red");
-                    render();
-                }
-            }, 100); 
-        },
-
-        sellData: function() {
-            if(state.capturedData.length === 0) {
-                log("Você não possui dados válidos para liquidar na Deep Web.", "log-red");
-                return;
-            }
-            let totalGain = 0;
-            state.capturedData.forEach(item => totalGain += item.val);
-            
-            state.player.cash += totalGain;
+        sellAllCollectedData: function() {
+            if(state.lootFiles.length === 0) return;
+            let profit = 0;
+            state.lootFiles.forEach(file => profit += file.estimatedValue);
+            state.player.cash += profit;
             playerRef.update({ cash: state.player.cash });
-            
-            log(`Deep Web: Foram liquidados ${state.capturedData.length} arquivos anonimamente. Lucro: +$${totalGain}`, 'log-gold');
-            state.capturedData = [];
-            render();
+
+            logSystem(`Mercado Negro liquidados: ${state.lootFiles.length} arquivos vendidos. Lucro: +$${profit}`, "log-gold");
+            state.lootFiles = [];
+            ui.renderAll();
         },
 
-        showProgress: function(ms, callback, mode = 'normal') {
-            state.isActionRunning = true;
-            
-            // Travar visualmente botões críticos durante execução
-            document.getElementById('btn-scan-main').disabled = true;
-            
-            const container = document.getElementById('prog-container');
-            const bar = document.getElementById('prog-bar');
-            container.style.display = 'block';
-            bar.className = mode === 'trace' ? "progress-bar trace-bar" : "progress-bar";
-            bar.style.width = '0%';
-            
-            let start = null;
-            function step(timestamp) {
-                if (!start) start = timestamp;
-                let progress = timestamp - start;
-                let percent = Math.min((progress / ms) * 100, 100);
-                bar.style.width = percent + "%";
-                if (progress < ms) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    container.style.display = 'none';
-                    state.isActionRunning = false;
-                    document.getElementById('btn-scan-main').disabled = false;
+        triggerTask: function(name, secs, callback) {
+            const taskId = 't_' + Date.now();
+            const taskObj = { id: taskId, name: name, maxSecs: secs, currentSecs: secs };
+            state.activeTasks.push(taskObj);
+            ui.renderAll();
+
+            const interval = setInterval(() => {
+                taskObj.currentSecs--;
+                if(taskObj.currentSecs <= 0) {
+                    clearInterval(interval);
+                    state.activeTasks = state.activeTasks.filter(t => t.id !== taskId);
                     callback();
                 }
-            }
-            window.requestAnimationFrame(step);
+                ui.renderAll();
+            }, 1000);
         }
     };
 
-    // --- AUTOMATION ENGINE ---
-    const scriptEngine = {
-        run: function() {
-            const code = document.getElementById('script-editor').value;
-            log("Inicializando compilação do script local...", "log-blue");
-            try {
-                if(code.includes("auto_scan()")) { actions.scanNetwork(); }
-                if(code.includes("hack_nearest()")) {
-                    if(state.npcRedes.length > 1) {
-                        actions.hackNPC(state.npcRedes[state.npcRedes.length - 1].id);
-                    } else {
-                        log("Falta de nós mapeados em cache para automação.", "log-red");
-                    }
-                }
-            } catch(e) {
-                log("Falha de compilação: " + e.message, "log-red");
+    // --- RENDERIZAÇÃO DA INTERFACE GRÁFICA (UI) ---
+    const ui = {
+        switchTab: function(tabId, element) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        },
+
+        renderAll: function() {
+            // Update HUD superior
+            document.getElementById('hud-ip').innerText = state.player.ip;
+            document.getElementById('hud-cash').innerText = `$${state.player.cash}`;
+
+            // Render Gerenciador de Tarefas
+            const tasksList = document.getElementById('tasks-list');
+            if(state.activeTasks.length === 0) {
+                tasksList.innerHTML = `<p style="color:#777; font-size:0.85rem;">Nenhuma tarefa pendente ou compilação em andamento.</p>`;
+            } else {
+                tasksList.innerHTML = '';
+                state.activeTasks.forEach(t => {
+                    const pct = ((t.maxSecs - t.currentSecs) / t.maxSecs) * 100;
+                    tasksList.innerHTML += `
+                        <div class="task-row">
+                            <div><strong>${t.name}</strong></div>
+                            <div style="display:flex; align-items:center;">
+                                <span>${t.currentSecs}s restantes</span>
+                                <div class="progress-container"><div class="progress-bar" style="width:${pct}%"></div></div>
+                            </div>
+                        </div>
+                    `;
+                });
             }
-        }
-    };
 
-    // --- RENDERIZAÇÃO DA VIEW ---
-    function render() {
-        document.getElementById('p-ip').innerText = state.player.ip;
-        document.getElementById('p-net').innerText = state.player.currentNet;
-        document.getElementById('p-cash').innerText = `$${state.player.cash}`;
+            // Render Tabela de Conexões Externas (Internet)
+            const tbody = document.getElementById('network-list-tbody');
+            tbody.innerHTML = '';
 
-        // Atualizar Inventário de Loot (Deep Web)
-        const lootBox = document.getElementById('loot-box');
-        if(state.capturedData.length === 0) {
-            lootBox.innerHTML = `<p style="color:#555; font-size:0.8rem; text-align:center; padding: 10px;">Nenhum dado capturado no inventário.</p>`;
-        } else {
-            lootBox.innerHTML = '';
-            state.capturedData.forEach(item => {
-                lootBox.innerHTML += `
-                    <div class="loot-item">
-                        <span style="color:var(--neon-blue)">📦 ${item.name}</span>
-                        <span style="color:var(--neon-gold)">$${item.val}</span>
-                    </div>
+            // Players Reais
+            Object.keys(state.onlinePlayers).forEach(id => {
+                if(id === myId) return;
+                const p = state.onlinePlayers[id];
+                tbody.innerHTML += `
+                    <tr>
+                        <td>🥷 <span style="color:var(--accent-blue)">Hacker_Remoto</span></td>
+                        <td>${p.ip}</td>
+                        <td>${p.currentNet}</td>
+                        <td>
+                            <button class="btn" style="padding:4px 8px; font-size:0.75rem;" onclick="actions.executePortScan('${p.id}', '${p.ip}')">Port Scan</button>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="actions.executeBruteforce('${p.id}', '${p.ip}')">Bruteforce</button>
+                        </td>
+                    </tr>
                 `;
             });
-        }
 
-        const view = document.getElementById('network-view');
-        view.innerHTML = '';
-
-        // Render Redes NPCs
-        state.npcRedes.forEach(net => {
-            const node = document.createElement('div');
-            node.className = `node ${net.type.toLowerCase()} ${state.selectedId === net.id ? 'active' : ''}`;
-            node.innerHTML = `<div style="font-size:1.5rem">${getIcon(net.type)}</div><div class="node-label"><strong>${net.name}</strong><br>${net.ip}</div>`;
-            node.onclick = () => selectNode(net.id);
-            view.appendChild(node);
-        });
-
-        // Render Players Reais
-        Object.keys(state.onlinePlayers).forEach(id => {
-            if(id === myId) return;
-            const p = state.onlinePlayers[id];
-            const node = document.createElement('div');
-            node.className = `node player ${state.selectedId === id ? 'active' : ''}`;
-            node.innerHTML = `<div style="font-size:1.5rem">🥷</div><div class="node-label"><strong>Hacker_Target</strong><br>${p.ip}</div>`;
-            node.onclick = () => selectNode(id);
-            view.appendChild(node);
-        });
-
-        // Interface do Alvo Selecionado (Painel Direita)
-        const targetUI = document.getElementById('target-ui');
-        if(state.selectedId !== null) {
-            if(state.selectedId.startsWith('npc_')) {
-                const net = state.npcRedes.find(r => r.id === state.selectedId);
-                if(!net) return;
-                targetUI.innerHTML = `
-                    <h3>${net.name}</h3>
-                    <p style="margin: 4px 0;">IP: ${net.ip}</p>
-                    <p style="margin: 4px 0;">SEGMENTO: <span style="color:var(--neon-${CONFIG.types[net.type].color})">${net.type}</span></p>
-                    <p style="margin: 4px 0;">DISPOSITIVOS: ${net.devices}</p>
-                    <hr style="margin:10px 0; border:0; border-top:1px solid #333">
-                    <button onclick="actions.mover('${net.name}')" ${state.isActionRunning ? 'disabled' : ''}>DEFINIR PROXY NESTE NÓ</button>
-                    <button class="btn-danger" onclick="actions.hackNPC('${net.id}')" ${state.isActionRunning ? 'disabled' : ''}>INJETAR EXPLOIT BANCÁRIO</button>
+            // NPCs Estáticos
+            state.npcNodes.forEach(node => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>🖥️ ${node.name}</td>
+                        <td>${node.ip}</td>
+                        <td>WAN_MUNDIAL</td>
+                        <td>
+                            <button class="btn btn-success" style="padding:4px 8px; font-size:0.75rem;">Injetar Rootkit</button>
+                        </td>
+                    </tr>
                 `;
+            });
+
+            // Render Deep Web Mercado
+            const market = document.getElementById('market-container');
+            if(state.lootFiles.length === 0) {
+                market.innerHTML = `<p style="color:#666; font-size:0.85rem;">Nenhum banco de dados interceptado no inventário atualmente.</p>`;
             } else {
-                const p = state.onlinePlayers[state.selectedId];
-                if(!p) { state.selectedId = null; return; }
-                
-                const mesmaRede = p.currentNet === state.player.currentNet;
-                
-                targetUI.innerHTML = `
-                    <h3 style="color:var(--neon-purple)">PLAYER IDENTIFICADO</h3>
-                    <p style="margin: 4px 0;">IP ADQUIRIDO: ${p.ip}</p>
-                    <p style="margin: 4px 0;">SUB-REDE ATUAL: <span style="color:var(--neon-blue)">${p.currentNet}</span></p>
-                    <hr style="margin:10px 0; border:0; border-top:1px solid #333">
-                    
-                    <button class="btn-purple" onclick="actions.scanPlayerPorts('${p.id}')" ${state.isActionRunning ? 'disabled' : ''}>ESCANEAR PORTAS & ROUBAR DADOS</button>
-                    
-                    ${mesmaRede 
-                        ? `<button class="btn-danger" onclick="actions.startPlayerTrace('${p.id}')" ${state.isActionRunning ? 'disabled' : ''}>RASTREAR & LIMPAR SALDO</button>`
-                        : `<p style="color:var(--neon-red); font-size:0.75rem; text-align:center; margin-top:5px; border: 1px dashed #333; padding: 6px;">Para forçar o roubo de fundos bancários, mude seu proxy para a sub-rede ativa da vítima (${p.currentNet}).</p>`
-                    }
-                `;
+                market.innerHTML = '';
+                state.lootFiles.forEach(file => {
+                    market.innerHTML += `
+                        <div class="market-card">
+                            <div style="font-size:1.5rem; margin-bottom:5px;">📦</div>
+                            <strong style="font-size:0.8rem; display:block; color:#333; overflow:hidden; text-overflow:ellipsis;">${file.filename}</strong>
+                            <span style="font-size:0.75rem; color:#888; display:block; margin: 4px 0;">Origem: ${file.origin}</span>
+                            <strong style="color:var(--accent-green); font-size:0.9rem;">$${file.estimatedValue}</strong>
+                        </div>
+                    `;
+                });
             }
-        } else {
-            targetUI.innerHTML = `<p style="color:#555">Selecione uma sub-rede ou digite um IP ativo no scanner para inspecionar...</p>`;
         }
-    }
+    };
 
-    function selectNode(id) {
-        state.selectedId = id;
-        render();
-    }
-
-    function getIcon(type) {
-        switch(type) {
-            case 'RESIDENCIAL': return '🏠';
-            case 'EMPRESARIAL': return '🏢';
-            case 'BANCO': return '💰';
-            case 'POLICIA': return '🚔';
-            default: return '🌐';
-        }
-    }
-
-    render();
-    log("Interface CyberNet Core v2.2 carregada. Proteções de Runtime injetadas.", "log-green");
+    // Inicialização do Jogo
+    ui.renderAll();
+    logSystem("Servidor operacional inicializado. Conexão via Firebase estabelecida.", "log-green");
 </script>
 
 </body>
