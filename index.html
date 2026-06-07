@@ -3,32 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CyberNet - Hacker Wars Edition</title>
+    <title>Painel de Controle - Hacker Wars</title>
     
+    <!-- CSS estrutural original do Bootstrap 2 do Hacker Wars -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     
     <style>
-        /* CSS customizado para emular o he.css / Dark Mode do jogo */
-        body { background-color: #222; color: #eee; font-family: Arial, sans-serif; margin: 0; }
-        #header { background: #111; padding: 12px 20px; border-bottom: 3px solid #222; }
+        /* Estilização customizada emulando o he.css (Tema Dark Mode do HW) */
+        body { background-color: #212121; color: #eee; font-family: Arial, sans-serif; margin: 0; }
+        #header { background: #1a1a1a; padding: 12px 20px; border-bottom: 1px solid #2d2d2d; }
         #header h1 { margin: 0; font-size: 20px; line-height: 20px; }
         #header h1 a { color: #fff; text-decoration: none; font-weight: bold; }
         
-        #user-nav { background: #111; border-bottom: 1px solid #2e2e2e; margin-bottom: 0; }
+        #user-nav { background: #1a1a1a; border-bottom: 1px solid #2d2d2d; margin-bottom: 0; min-height: 40px; }
         #user-nav .nav { margin: 0; float: right; list-style: none; display: flex; }
-        #user-nav .btn-inverse { background: #111; border: none; border-left: 1px solid #2e2e2e; border-radius: 0; margin: 0; }
-        #user-nav .btn-inverse a { color: #fff; padding: 10px 15px; display: block; font-size: 11px; text-decoration: none; }
-        #user-nav .btn-inverse a:hover { background: #222; }
+        #user-nav .btn-inverse { background: #1a1a1a; border: none; border-left: 1px solid #2d2d2d; border-radius: 0; margin: 0; }
+        #user-nav .btn-inverse a { color: #fff; padding: 10px 15px; display: block; font-size: 12px; text-decoration: none; }
+        #user-nav .btn-inverse a:hover { background: #262626; }
 
-        #sidebar { width: 220px; background: #111; float: left; min-height: 100vh; position: absolute; }
+        #sidebar { width: 220px; background: #1a1a1a; float: left; min-height: 100vh; position: absolute; border-right: 1px solid #2d2d2d; }
         #sidebar ul { list-style: none; padding: 0; margin: 0; }
-        #sidebar ul li { border-bottom: 1px solid #2e2e2e; }
-        #sidebar ul li a { display: block; padding: 12px 20px; color: #999; text-decoration: none; font-size: 12px; }
+        #sidebar ul li { border-bottom: 1px solid #2d2d2d; }
+        #sidebar ul li a { display: block; padding: 12px 20px; color: #aaa; text-decoration: none; font-size: 13px; }
         #sidebar ul li a i { margin-right: 10px; width: 16px; text-align: center; }
-        #sidebar ul li a:hover, #sidebar ul li.active a { background: #282828; color: #fff; }
-        #sidebar ul li.active a { border-left: 4px solid #228b22; background: #1e1e1e; color: #fff; }
+        #sidebar ul li a:hover, #sidebar ul li.active a { background: #262626; color: #fff; }
+        #sidebar ul li.active a { border-left: 4px solid #4cae4c; background: #151515; }
 
         #content { margin-left: 220px; background: #2b2b2b; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         #content-header { border-bottom: 1px solid #3a3a3a; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -36,61 +37,69 @@
         
         .header-ip-show { background: #111; padding: 4px 12px; border-radius: 3px; border: 1px solid #3a3a3a; font-family: monospace; color: #00ff66; font-size: 14px; font-weight: bold; }
         .header-info { font-size: 11px; color: #aaa; margin-top: 5px; text-align: right; }
-        .header-info span { margin-left: 10px; }
+        .header-info span { margin-left: 12px; }
         .green { color: #51a351 !important; font-weight: bold; }
+        .small { font-size: 11px; color: #999; }
 
-        /* Estilização das caixas e tabelas oficiais do HW */
-        .widget-box { background: #222; border: 1px solid #3a3a3a; margin-top: 16px; clear: both; }
+        /* Blocos Widget-Box fiéis ao HTML enviado */
+        .widget-box { background: #222; border: 1px solid #3a3a3a; margin-top: 16px; clear: both; border-radius: 4px; overflow: hidden; }
         .widget-title { background: #191919; height: 36px; border-bottom: 1px solid #3a3a3a; padding: 0 10px; display: flex; align-items: center; justify-content: space-between; }
-        .widget-title h5 { color: #fff; float: left; font-size: 12px; font-weight: bold; padding: 0; margin: 0; }
+        .widget-title h5 { color: #fff; font-size: 12px; font-weight: bold; margin: 0; }
         .widget-content { padding: 15px; }
         .widget-content.nopadding { padding: 0; }
         
+        /* Tabelas Cozi do Hacker Wars */
         .table-cozy { margin-bottom: 0; width: 100%; border-collapse: collapse; }
         .table-cozy td, .table-cozy th { padding: 8px 10px; font-size: 12px; border-top: 1px solid #3a3a3a; border-bottom: 1px solid #3a3a3a; text-align: left; }
         .table-striped tbody tr:nth-child(odd) td { background-color: #262626; }
         .table-striped tbody tr:nth-child(even) td { background-color: #222222; }
         .table-bordered th, .table-bordered td { border-left: 1px solid #3a3a3a; }
 
-        /* Estilos da Lista de Processos / Downloads */
+        /* Barras de progresso animadas (Processos da CPU) */
         .list-proc { list-style: none; padding: 0; margin: 0; }
         .list-proc li { background: #262626; border: 1px solid #3a3a3a; padding: 15px; margin-bottom: 10px; border-radius: 4px; display: flex; align-items: center; }
-        .pbar-container { background: #111; border: 1px solid #444; border-radius: 3px; height: 16px; position: relative; width: 100%; overflow: hidden; }
+        .pbar-container { background: #111; border: 1px solid #444; border-radius: 3px; height: 20px; position: relative; width: 100%; overflow: hidden; }
         .pbar-fill { background: #0066cc; height: 100%; width: 0%; transition: width 0.2s linear; }
-        .pbar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 11px; font-weight: bold; line-height: 16px; color: #fff; }
+        .pbar-text { position: absolute; width: 100%; text-align: center; top: 0; font-size: 11px; font-weight: bold; line-height: 20px; color: #fff; }
 
-        /* Bloqueio de Login */
+        /* Tela de Autenticação do Google */
         #login-screen { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#111; z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-        .login-box { background:#222; border:1px solid #3a3a3a; padding:30px; border-radius:6px; text-align:center; width:320px; }
-        .btn-google { background:#4285F4; color:#fff; border:none; padding:10px 20px; font-weight:bold; border-radius:4px; width:100%; cursor:pointer; font-size:14px; margin-top:15px; }
+        .login-box { background:#1e1e1e; border:1px solid #3a3a3a; padding:35px; border-radius:6px; text-align:center; width:340px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .btn-google { background:#4285F4; color:#fff; border:none; padding:12px 20px; font-weight:bold; border-radius:4px; width:100%; cursor:pointer; font-size:14px; margin-top:20px; display:flex; align-items:center; justify-content:center; gap:10px; }
         .btn-google:hover { background:#357ae8; }
     </style>
 
+    <!-- SDKs do Firebase v8 (Auth + Database) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body>
 
+    <!-- DIÁLOGO DE LOGIN (SISTEMA DE ACESSO EXTERNO) -->
     <div id="login-screen">
         <div class="login-box">
-            <h3 style="color:#fff; margin-bottom:5px;">CyberNet MMO</h3>
-            <p style="color:#888; font-size:12px;">Baseado na Engine do Hacker Wars</p>
-            <button class="btn-google" onclick="authEngine.login()"><i class="fab fa-google"></i> Conectar via Google</button>
+            <h3 style="color:#fff; margin:0 0 5px 0; font-weight:bold;">Hacker Wars</h3>
+            <p style="color:#888; font-size:12px; margin:0;">Rede de Simulação MMO v1.0.0</p>
+            <button class="btn-google" onclick="authEngine.login()">
+                <i class="fab fa-google"></i> Autenticar com o Google
+            </button>
         </div>
     </div>
 
+    <!-- TOPO NAVBAR -->
     <div id="header">
         <h1><a href="#">Hacker Wars</a></h1>
     </div>
     
     <div id="user-nav" class="navbar navbar-inverse">
         <ul class="nav">
-            <li class="btn btn-inverse"><a href="#"><i class="fa fa-user"></i> <span id="hud-user">Carregando...</span></a></li>
-            <li class="btn btn-inverse"><a href="#" onclick="authEngine.logout()"><i class="fa fa-power-off"></i> Sair</a></li>
+            <li class="btn btn-inverse"><a href="#"><i class="fa fa-inverse fa-user"></i> <span id="hud-user">Autenticando...</span></a></li>
+            <li class="btn btn-inverse"><a href="#" onclick="authEngine.logout()"><i class="fa fa-power-off fa-inverse"></i> Sair</a></li>
         </ul>
     </div>
 
+    <!-- MENU LATERAL DE REQUISIÇÕES -->
     <div id="sidebar">
         <ul>
             <li id="menu-index" class="active" onclick="ui.switchTab('index')"><a href="#"><i class="fa fa-home"></i> <span>Início</span></a></li>
@@ -100,24 +109,29 @@
         </ul>
     </div>
 
+    <!-- CONTEÚDO DA INTERFACE -->
     <div id="content">
         
+        <!-- HEADER DE STATUS DINÂMICO -->
         <div id="content-header">
             <h1 id="page-title">Painel de Controle</h1>
             <div class="header-ip hide-phone">
                 <div style="text-align: right;">
-                    <span class="header-ip-show" id="hud-ip">0.0.0.0</span>
+                    <span class="header-ip-show" id="hud-ip">212.220.237.80</span>
                 </div>
                 <div class="header-info">
+                    <span><i class="fa fa-clock"></i> Term: <strong style="color:#fff;">2026-06-07</strong></span>
                     <span class="online"><i class="fa fa-users"></i> Online: <strong id="hud-online">1</strong></span>
-                    <span><i class="fa fa-star"></i> Reputação: <strong style="color:#fff;">1,500</strong></span>
-                    <span><i class="fa fa-briefcase"></i> Finanças: <strong class="green" id="hud-cash">$0</strong></span>
+                    <span><i class="fa fa-star"></i> Reputação: <strong id="hud-rep">2,080</strong></span>
+                    <span><i class="fa fa-briefcase"></i> Finanças: <strong class="green" id="hud-cash">$7,243</strong></span>
                 </div>
             </div>
         </div>
 
+        <!-- VISTA 1: PAINEL DE CONTROLE (INDEX) -->
         <div id="tab-index" class="tab-view">
             <div class="row-fluid">
+                <!-- Informações do Hardware -->
                 <div class="span5">
                     <div class="widget-box">
                         <div class="widget-title">
@@ -128,13 +142,25 @@
                                 <tbody>
                                     <tr><td><i class="fa fa-microchip"></i></td><td>Processador</td><td><strong>5 GHz</strong></td></tr>
                                     <tr><td><i class="fa fa-hdd"></i></td><td>Disco Rígido</td><td><strong>5 GB</strong></td></tr>
-                                    <tr><td><i class="fa fa-memory"></i></td><td>Memória RAM</td><td><strong>2 GB</strong></td></tr>
+                                    <tr><td><i class="fa fa-memory"></i></td><td>Memória</td><td><strong>2 GB</strong></td></tr>
                                     <tr><td><i class="fa fa-wifi"></i></td><td>Internet</td><td><strong>50 Mbit/s</strong></td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    
+                    <!-- FBI Procurados -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <h5>Lista de Procurados do FBI</h5>
+                        </div>
+                        <div class="widget-content padding border" style="font-size: 12px; color: #aaa;">
+                            Sem IPs procurados no momento
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Informações Gerais -->
                 <div class="span7">
                     <div class="widget-box">
                         <div class="widget-title">
@@ -143,9 +169,32 @@
                         <div class="widget-content nopadding">
                             <table class="table table-cozy table-striped table-bordered">
                                 <tbody>
-                                    <tr><td><i class="fa fa-trophy"></i></td><td>Reputação Geral</td><td>1,500 <span class="small">(Rank #1)</span></td></tr>
-                                    <tr><td><i class="fa fa-cogs"></i></td><td>Processos em execução</td><td id="dash-proc-count">0</td></tr>
-                                    <tr><td><i class="fa fa-link"></i></td><td>Conectado atualmente a</td><td>Ninguém</td></tr>
+                                    <tr><td><i class="fa fa-trophy"></i></td><td>Reputação</td><td><span id="dash-rep">2,080</span> <span class="small">Rank #44</span></td></tr>
+                                    <tr><td><i class="fa fa-tasks"></i></td><td>Tarefas rodando</td><td><a href="#" onclick="ui.switchTab('processes')" id="dash-proc-count" style="color:#00ff66; font-weight:bold;">0</a></td></tr>
+                                    <tr><td><i class="fa fa-globe"></i></td><td>Conectado a</td><td>Ninguém</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Top 7 Usuários -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <h5>Top 7 usuários</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr><th>#</th><th>Usuário</th><th>Reputação</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>Jregg</td><td>687,785</td></tr>
+                                    <tr><td>2</td><td>r_0_b_3_3</td><td>342,235</td></tr>
+                                    <tr><td>3</td><td>rainbowdash</td><td>283,598</td></tr>
+                                    <tr><td>4</td><td>Epsilon</td><td>210,960</td></tr>
+                                    <tr><td>5</td><td>Nephilim</td><td>179,903</td></tr>
+                                    <tr><td>6</td><td>Kyuuja</td><td>154,243</td></tr>
+                                    <tr><td>7</td><td>Schade</td><td>153,106</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -154,6 +203,7 @@
             </div>
         </div>
 
+        <!-- VISTA 2: GERENCIADOR DE TAREFAS (PROCESSES) -->
         <div id="tab-processes" class="tab-view" style="display:none;">
             <div class="widget-box">
                 <div class="widget-title">
@@ -161,36 +211,35 @@
                 </div>
                 <div class="widget-content">
                     <ul class="list-proc" id="tasks-holder">
-                        <li style="color:#aaa;">Nenhuma tarefa ativa processando na fila da CPU.</li>
+                        <li style="color:#aaa; text-align:center;">Nenhuma tarefa ativa processando na fila da CPU.</li>
                     </ul>
                 </div>
             </div>
         </div>
 
+        <!-- VISTA 3: SOFTWARE -->
         <div id="tab-software" class="tab-view" style="display:none;">
             <div class="widget-box">
                 <div class="widget-title">
-                    <h5>Pesquisar / Desenvolver Aplicações em localhost</h5>
+                    <h5>Desenvolver softwares em localhost</h5>
                 </div>
                 <div class="widget-content nopadding">
                     <table class="table table-cozy table-striped">
                         <thead>
-                            <tr><th>Nome do Software</th><th>Tipo</th><th>Tempo</th><th>Custo</th><th>Operação</th></tr>
+                            <tr><th>Nome do Software</th><th>Tempo</th><th>Custo</th><th>Ação</th></tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><b>Basic Cracker.crc</b> (1.0)</td>
-                                <td>Cracker / Quebra de Chaves</td>
                                 <td>15s</td>
                                 <td class="green">$100</td>
                                 <td><button class="btn btn-mini btn-success" onclick="game.compile('Basic Cracker.crc', 15, 100)">Compilar</button></td>
                             </tr>
                             <tr>
-                                <td><b>BruteForce_Exploit.exe</b> (2.1)</td>
-                                <td>Invasão de Rede Bancária</td>
-                                <td>30s</td>
-                                <td class="green">$300</td>
-                                <td><button class="btn btn-mini btn-success" onclick="game.compile('BruteForce_Exploit.exe', 30, 300)">Compilar</button></td>
+                                <td><b>Port_Scanner.exe</b> (1.2)</td>
+                                <td>25s</td>
+                                <td class="green">$250</td>
+                                <td><button class="btn btn-mini btn-success" onclick="game.compile('Port_Scanner.exe', 25, 250)">Compilar</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -198,29 +247,30 @@
             </div>
         </div>
 
+        <!-- VISTA 4: INTERNET -->
         <div id="tab-internet" class="tab-view" style="display:none;">
             <div class="widget-box">
                 <div class="widget-title">
-                    <h5>Efetuar Roteamento e Conexão TCP</h5>
+                    <h5>Efetuar varredura TCP por IP</h5>
                 </div>
                 <div class="widget-content">
-                    <p style="font-size:12px; color:#aaa;">Insira o endereço IP alvo para tentar quebrar a segurança da sub-rede remota:</p>
-                    <input type="text" id="target-ip-field" placeholder="Ex: 184.22.109.5" style="background:#111; color:#fff; border:1px solid #444; padding:6px; font-family:monospace;">
-                    <button class="btn btn-danger" style="margin-top:-10px;" onclick="game.launchAttack()">Executar Bruteforce Remoto</button>
+                    <input type="text" id="target-ip-field" placeholder="Ex: 212.220.237.80" style="background:#111; color:#fff; border:1px solid #444; padding:6px; font-family:monospace; margin-bottom:0;">
+                    <button class="btn btn-danger" onclick="game.launchAttack()">Executar Bruteforce</button>
                 </div>
             </div>
             
             <div class="widget-box">
                 <div class="widget-title">
-                    <h5>Servidores e Jogadores Conectados na Rede</h5>
+                    <h5>Dispositivos Ativos na Sub-rede</h5>
                 </div>
                 <div class="widget-content nopadding">
                     <table class="table table-cozy table-striped">
                         <thead>
-                            <tr><th>Assinatura Host</th><th>Endereço IP Externo</th><th>Status do Firewall</th></tr>
+                            <tr><th>Username</th><th>Endereço IP</th><th>Status</th></tr>
                         </thead>
                         <tbody id="network-players-table">
-                            </tbody>
+                            <!-- Atualizado via Realtime -->
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -229,7 +279,7 @@
     </div>
 
     <script>
-        // --- COLOQUE SUAS CREDENCIAIS REAIS DO FIREBASE AQUI ---
+        // --- PARÂMETROS DO FIREBASE REALTIME ---
         const firebaseConfig = {
             apiKey: "AIzaSyD8RPa3uKbo3xPstwG7ymxIAjUHrkvDdwk",
             authDomain: "cybernet-9ac4b.firebaseapp.com",
@@ -247,15 +297,15 @@
         let myId = null;
         let playerRef = null;
         let localState = {
-            playerData: { id: "", username: "", cash: 500, ip: "" },
+            playerData: { id: "", username: "", cash: 7243, rep: 2080, ip: "" },
             activeTasks: [],
             globalPlayers: {}
         };
 
-        // --- SISTEMA DE AUTENTICAÇÃO ---
+        // --- ENGENHARIA DE LOGIN DO GOOGLE ---
         const authEngine = {
             login: function() {
-                firebase.auth().signInWithPopup(provider);
+                firebase.auth().signInWithPopup(provider).catch(err => alert("Erro Auth: " + err.message));
             },
             logout: function() {
                 firebase.auth().signOut().then(() => window.location.reload());
@@ -273,14 +323,17 @@
                     if(data) {
                         localState.playerData = data;
                     } else {
+                        // Se for um novo usuário, herda os dados do dump enviado por padrão
                         localState.playerData = {
                             id: myId,
-                            username: user.displayName || "f3lix_gamer",
-                            cash: 7243, // Saldo inicial baseado no seu perfil oficial enviado
-                            ip: `${Math.floor(Math.random()*210)+10}.${Math.floor(Math.random()*254)}.${Math.floor(Math.random()*254)}.${Math.floor(Math.random()*254)}`
+                            username: user.displayName || "f3lix_gamer577",
+                            cash: 7243,
+                            rep: 2080,
+                            ip: `212.220.${Math.floor(Math.random()*240)+10}.${Math.floor(Math.random()*254)}`
                         };
                         playerRef.set(localState.playerData);
                     }
+                    // Desconectar remove a flag do lobby online instantaneamente
                     playerRef.onDisconnect().remove();
                     initDatabaseSync();
                 });
@@ -289,7 +342,7 @@
             }
         });
 
-        // --- SINCRONIZAÇÃO EM TEMPO REAL ---
+        // --- MODELO DE ESCUTA DO BANCO ---
         function initDatabaseSync() {
             db.ref('players').on('value', (snapshot) => {
                 localState.globalPlayers = snapshot.val() || {};
@@ -297,28 +350,31 @@
                 
                 if(localState.globalPlayers[myId]) {
                     localState.playerData.cash = localState.globalPlayers[myId].cash;
+                    localState.playerData.rep = localState.globalPlayers[myId].rep;
                 }
                 ui.render();
             });
         }
 
-        // --- ENGENHARIA DE GAMEPLAY (AÇÕES) ---
+        // --- LÓGICA DE JOGO ASSÍNCRONA ---
         const game = {
             compile: function(name, secs, cost) {
-                if(localState.playerData.cash < cost) return alert("Saldo insuficiente para iniciar o desenvolvimento.");
+                if(localState.playerData.cash < cost) return alert("Saldo insuficiente para iniciar.");
                 
                 localState.playerData.cash -= cost;
                 playerRef.update({ cash: localState.playerData.cash });
 
                 this.createTask(`Desenvolver arquivo <b>${name}</b> (1.0) em <span class='green'>localhost</span>`, secs, () => {
-                    alert(`Compilação do software ${name} finalizada com sucesso!`);
+                    localState.playerData.rep += 50; // Ganha reputação ao compilar
+                    playerRef.update({ rep: localState.playerData.rep });
+                    alert(`Compilação de ${name} concluída! +50 Reputação.`);
                 });
                 ui.switchTab('processes');
             },
 
             launchAttack: function() {
                 const ipTarget = document.getElementById('target-ip-field').value.trim();
-                if(!ipTarget) return alert("Insira o IP que deseja quebrar.");
+                if(!ipTarget) return alert("Insira o IP alvo.");
 
                 let targetFound = null;
                 Object.keys(localState.globalPlayers).forEach(key => {
@@ -327,19 +383,21 @@
                     }
                 });
 
-                if(!targetFound) return alert("IP externo inacessível ou fora da rede mundial.");
+                if(!targetFound) return alert("Host inacessível ou fora da sub-rede.");
 
-                this.createTask(`Quebrando algoritmo de segurança no IP <b>${ipTarget}</b>`, 12, () => {
+                this.createTask(`Quebrando chaves de criptografia no IP <b>${ipTarget}</b>`, 12, () => {
                     db.ref('players/' + targetFound.id).once('value', (snap) => {
                         let currentTargetData = snap.val();
                         if(currentTargetData && currentTargetData.cash > 0) {
                             let stolen = currentTargetData.cash;
                             localState.playerData.cash += stolen;
-                            playerRef.update({ cash: localState.playerData.cash });
+                            localState.playerData.rep += 200;
+                            
+                            playerRef.update({ cash: localState.playerData.cash, rep: localState.playerData.rep });
                             db.ref('players/' + targetFound.id).update({ cash: 0 });
-                            alert(`Ataque Bruteforce bem sucedido! Você drenou $${stolen} de ${ipTarget}`);
+                            alert(`Bruteforce com sucesso! Transferido $${stolen} para suas finanças.`);
                         } else {
-                            alert("Varredura concluída, mas o alvo já estava com a conta zerada.");
+                            alert("Varredura terminada. O alvo não possuía fundos na conta bancária.");
                         }
                     });
                 });
@@ -365,7 +423,7 @@
             }
         };
 
-        // --- RENDERIZAÇÃO DA INTERFACE ---
+        // --- ELEMENTOS DE INTERFACE (DOM) ---
         const ui = {
             switchTab: function(tabName) {
                 document.querySelectorAll('.tab-view').forEach(el => el.style.display = 'none');
@@ -374,33 +432,36 @@
                 document.getElementById('tab-' + tabName).style.display = 'block';
                 document.getElementById('menu-' + tabName).classList.add('active');
 
-                // Ajuste dinâmico de título da página
                 const titles = { index: "Painel de Controle", processes: "Gerenciador de tarefas", software: "Software", internet: "Internet" };
                 document.getElementById('page-title').innerText = titles[tabName];
             },
 
             render: function() {
-                // Atualiza HUD superior e Geral
+                // Atualiza HUD Superior
                 document.getElementById('hud-user').innerText = localState.playerData.username;
                 document.getElementById('hud-cash').innerText = `$${localState.playerData.cash.toLocaleString()}`;
                 document.getElementById('hud-ip').innerText = localState.playerData.ip;
+                document.getElementById('hud-rep').innerText = localState.playerData.rep.toLocaleString();
+                
+                // Dashboard Index
+                document.getElementById('dash-rep').innerText = localState.playerData.rep.toLocaleString();
                 document.getElementById('dash-proc-count').innerText = localState.activeTasks.length;
 
-                // Renderizador de Tarefas (CPU)
+                // Renderizador do Gerenciador de Tarefas
                 const holder = document.getElementById('tasks-holder');
                 if(localState.activeTasks.length === 0) {
-                    holder.innerHTML = `<li style="color:#aaa;">Nenhuma tarefa ativa processando na fila da CPU.</li>`;
+                    holder.innerHTML = `<li style="color:#aaa; text-align:center; width:100%;">Nenhuma tarefa ativa processando na fila da CPU.</li>`;
                 } else {
                     holder.innerHTML = '';
                     localState.activeTasks.forEach(t => {
                         let pct = ((t.max - t.current) / t.max) * 100;
                         holder.innerHTML += `
-                            <li class="row-fluid" style="margin-bottom:12px;">
-                                <div class="span5">${t.desc}</div>
-                                <div class="span5">
+                            <li class="row-fluid" style="margin-bottom:12px; display:flex; align-items:center; width:100%;">
+                                <div class="span4">${t.desc}</div>
+                                <div class="span6">
                                     <div class="pbar-container">
                                         <div class="pbar-fill" style="width:${pct}%"></div>
-                                        <div class="pbar-text">${pct.toFixed(1)}% (${t.current}s restantes)</div>
+                                        <div class="pbar-text">${pct.toFixed(1)}% (${t.current}s)</div>
                                     </div>
                                 </div>
                                 <div class="span2" style="text-align:right;"><span class="label label-important">100% CPU</span></div>
@@ -409,24 +470,26 @@
                     });
                 }
 
-                // Renderizador de Rede (Internet)
+                // Renderizador de Jogadores Conectados (Aba Internet)
                 const netTable = document.getElementById('network-players-table');
                 netTable.innerHTML = '';
-                let visibleCount = 0;
+                let activeTargets = 0;
+                
                 Object.keys(localState.globalPlayers).forEach(key => {
                     if(key === myId) return;
-                    visibleCount++;
+                    activeTargets++;
                     let p = localState.globalPlayers[key];
                     netTable.innerHTML += `
                         <tr>
                             <td><i class="fa fa-laptop"></i> ${p.username}</td>
                             <td><span style="font-family:monospace; color:#00ff66;">${p.ip}</span></td>
-                            <td><span class="label label-warning">Vulnerável (No SSL)</span></td>
+                            <td><span class="label label-warning">Port 80 Open</span></td>
                         </tr>
                     `;
                 });
-                if(visibleCount === 0) {
-                    netTable.innerHTML = `<tr><td colspan="3" style="color:#aaa; text-align:center;">Nenhum servidor externo descoberto no gateway atual.</td></tr>`;
+                
+                if(activeTargets === 0) {
+                    netTable.innerHTML = `<tr><td colspan="3" style="color:#aaa; text-align:center;">Nenhum terminal externo conectado ao Gateway.</td></tr>`;
                 }
             }
         };
